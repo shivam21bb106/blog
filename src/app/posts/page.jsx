@@ -1,11 +1,13 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import axios from "axios"
 import BlogList from "@/components/BlogList";
+import { SearchContext } from "@/context/SearchContext";
 export default function BlogDisplay(){
-
 const [posts,setPosts]=useState([])
+const { searchTerm } = useContext(SearchContext);
+
 
 
 
@@ -22,11 +24,18 @@ const [posts,setPosts]=useState([])
 
     fetchData();
   }, []);
+
+ const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.tags.toLowerCase().includes(searchTerm.toLowerCase())
+  );
     return(
         <>
         <div className=" bg-gray-900 py-10 px-4 text-white ">
-
-       <BlogList post={posts}/>
+        {filteredPosts.length > 0 ? <BlogList post={filteredPosts}/>:<BlogList post={posts}/>}
+        
+       
 
 </div>
 
