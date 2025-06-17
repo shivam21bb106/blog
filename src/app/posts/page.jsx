@@ -5,7 +5,7 @@ import axios from "axios"
 import BlogList from "@/components/BlogList";
 export default function BlogDisplay(){
 
-const [posts,setPosts]=useState([''])
+const [posts,setPosts]=useState([])
 
 
 
