@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { Bell, UserCircle2, Menu, X } from "lucide-react";
-
+import { useContext } from "react";
+import { SearchContext } from "../context/SearchContext";
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+ const { searchTerm, setSearchTerm } = useContext(SearchContext);
   return (
     <nav className="bg-gray border-b shadow-sm px-4 py-2">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -18,6 +19,9 @@ export default function Navbar() {
             type="text"
             placeholder="Search..."
             className="w-full max-w-md px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+
           />
         </div>
 
@@ -46,6 +50,8 @@ export default function Navbar() {
             type="text"
             placeholder="Search..."
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="flex items-center space-x-4 px-1 pt-2 border-t">
             <Bell className="w-5 h-5 text-gray-600" />
