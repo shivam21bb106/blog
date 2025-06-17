@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
-
+import { useParams ,useRouter} from "next/navigation";
+import { SearchContext } from "@/context/SearchContext";
+import { useContext } from "react";
 export default function SinglePostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { searchTerm } = useContext(SearchContext);
 
   useEffect(() => {
     if (!id) return;
@@ -24,7 +27,15 @@ export default function SinglePostPage() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id]); 
+
+
+
+  useEffect(() => {
+    if (searchTerm) {
+      router.push("/posts");
+    }
+  }, [searchTerm]);
 
   if (loading) {
     return (
