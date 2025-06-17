@@ -1,9 +1,46 @@
-import connectMongoDB from "@/lib/dbconnect";
-import Posts from "@/models/Posts";
+'use client';
 
-export default async function SinglePostPage({ params }) {
-  await connectMongoDB();
-  const post = await Posts.findById(params.id);
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
+
+export default function SinglePostPage() {
+  const { id } = useParams();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/api/posts/${id}`);
+        setPost(res.data.post);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <p className="text-xl">Loading post...</p>
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <p className="text-xl text-red-400">Post not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white px-6 py-16">
@@ -27,6 +64,5 @@ export default async function SinglePostPage({ params }) {
         </div>
       </div>
     </div>
-
   );
 }
