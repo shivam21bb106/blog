@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-
-export function middleware(request){
-    const token=request.cookies.get('token')?.value;
+export default function middleware(request){
+    const token=request.cookies.get('token')
+    console.log("Token in middleware:", token);
 
     if(!token){
         return NextResponse.redirect(new URL('/login',request.url))
@@ -15,4 +15,7 @@ export function middleware(request){
         console.error(err);
         return NextResponse.redirect(new URL('/login',request.url));
     }
+}
+export const config = {
+  matcher: ['/new-post'], 
 }
