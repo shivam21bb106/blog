@@ -1,21 +1,26 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-export default function middleware(request){
-    const token=request.cookies.get('token')
-    console.log("Token in middleware:", token);
+import { jwtVerify } from "jose";
 
-    if(!token){
-        return NextResponse.redirect(new URL('/login',request.url))
-    }
-    try{
-        jwt.verify(token, process.env.JWT_SECRET);
-        return NextResponse.next();
-    }
-    catch(err){
-        console.error(err);
-        return NextResponse.redirect(new URL('/login',request.url));
-    }
+export async function middleware(request) {
+  const token = request.cookies.get("token")?.value;
+  console.log("Token in middleware:", token);
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  try {
+    // Decode and verify the token using jose
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    await jwtVerify(token, secret);
+
+    return NextResponse.next();
+  } catch (err) {
+    console.error("JWT verification failed:", err);
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 }
+
 export const config = {
-  matcher: ['/new-post'], 
-}
+  matcher: ["/new-post"],
+};
