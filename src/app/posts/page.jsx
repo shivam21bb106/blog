@@ -32,12 +32,20 @@ const { searchTerm } = useContext(SearchContext);
   );
     return(
         <>
-        <div className=" bg-gray-900 py-10 px-4 text-white ">
-        {filteredPosts.length > 0 ? <BlogList post={filteredPosts}/>:<BlogList post={posts}/>}
-        
-       
+ <div className="bg-gray-900 py-10 px-4 text-white">
+    {searchTerm ? (
+      filteredPosts.length > 0 ? (
+        <BlogList post={filteredPosts} />
+      ) : (
+        <div className="text-center text-gray-400 text-lg mt-10">
+          No results found for "<span className="font-semibold">{searchTerm}</span>"
+        </div>
+      )
+    ) : (
+      <BlogList post={posts} />
+    )}
+  </div>
 
-</div>
 
 
         </>
